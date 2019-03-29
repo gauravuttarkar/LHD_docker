@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+  /* Set the size of the div element that contains the map */
+  #map {
+    height: 400px;  /* The height is 400 pixels */
+    width: 60%%;  /* The width is the width of the web page */
+  }
+</style>
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+ <!-- AIzaSyDl5QtjxZpr2nG891xGrdVvkVHcPj5RcRU -->
+ <div class="jumbotron">
+  <h1 class="display-4 " ><center>{{event.title}}</center></h1>
+
+</div>
+ <!-- <center> <h3>{{event.title}}</h3> </center> -->
+ <!--The div element for the map -->
+ <div style="margin:30px;padding:40px" class="border border-primary" id="map"></div>
+ 
+<form style="margin:30px" action="/events/marker" method="POST">
+  <input type="text" name="lat" id="latbox" style="display: none;">
+  <input type="text" name="lng" id="lngbox" style="display: none;">
+  <input type="text" name="eventId" id="eventId" style="display: none;">
+  <input type="text" name="colour" id="color" style="display: none;">
+  <center><button type="submit" class="btn btn-primary" name="submit">Submit</button></center>
+</form>
+
+  <center>
+  <button type="button" class="btn btn-outline-warning" onclick="setColor(0)"><span><img src="http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"></span>Help needed</button>
+  <button type="button" class="btn btn-outline-danger" onclick="setColor(1)"><span><img src="http://maps.google.com/mapfiles/ms/icons/red-dot.png"></span>Danger area</button>
+  <button type="button" class="btn btn-outline-success" onclick="setColor(2)"><span><img src="http://maps.google.com/mapfiles/ms/icons/green-dot.png"></span>Safe area</button>
+  </center>
+  
+
+<!--   <ol>
+	<li>'weather':{{ weather.0}} ,{{description}} </li>
+    <li>'temp':{{ temp}} , </li>
+    <li>'pressure': {{ pressure }} </li>,
+    <li>'humidity': {{humidity}} ,</li>
+   <li> 'windspeed': {{ windspeed}}, </li>
+  <li> 'winddeg': {{winddeg}},</li>
+  </ol>
+ -->
+  
+  <dl style="margin-left:40%;margin-right:20%;width:60%;margin-top: 20px" class="row">
+  <dt class="col-sm-3">Weather</dt>
+  <dd class="col-sm-9">{{ weather.0}} {{description}}</dd>
+
+  <dt class="col-sm-3">Temperature</dt>
+  <dd class="col-sm-9">
+    {{ temp}}
+    
+  </dd>
+  <dt class="col-sm-3">Pressure</dt>
+  <dd class="col-sm-9"> {{ pressure }}</dd>
+  <dt class="col-sm-3">Humidity</dt>
+  <dd class="col-sm-9">{{humidity}}</dd>
+  <dt class="col-sm-3">Windspeed</dt>
+  <dd class="col-sm-9">{{ windspeed}}</dd>
+  <dt class="col-sm-3">Winddegree</dt>
+  <dd class="col-sm-9">{{ winddeg}}</dd>
+
+
+  </dl>
+
+
+
+
+<!--   <form class="ui form" method="POST" action="/events/twitter">
+  <div style="padding-right:50px" class="ui action input">
+  <input type="text" name="eventId" value="{{ event.id }}" style="display: none;">  
+ 
+  <button class="ui button">Tweets</button>
+  </div>
+  </form> -->
+  <div class="container-fluid" style="width:40%;margin: 20px">
+    <h4>Comments</h4>
+
+	{% for comment in comments %}
+  <div class="card" style="width: 18rem;margin:10px">
+  
+  <div class="card-body">
+    <h5 class="card-title">{{ comment.userName }}</h5>
+    <p class="card-text">{{comment.userComment}}</p>
+    
+  </div>
+  </div>
+	
+	
+	{% endfor %}
+</div>
+<div class="container-fluid" style="width:40%;margin: 20px">
+  <form class="form-group" method="POST" action="/events/comment">
+  <div style="padding-right:50px" class="ui action input">
+  <input type="text" class="form-control" name="eventId" value="{{ event.id }}" style="display: none;">  
+  <input style="margin:20px" type="text" class="form-control" name="comment" placeholder="Enter your comments">
+  <center><button class="btn btn-primary">Submit</button></center>
+  </div>
+  </form>
+</div>
+
+
+<div class=container">
+<h1><center>NEWS SECTION</center></h1>
+  <div class="news">
+    {% if article.articles|length <= 0 %}
+    <center><h2>No news</h2></center>
+    {% endif %}
+    {% for article in articles.articles|slice:"0:2" %}
+    <div class="row">
+      <div class="col-md">
+        <div  class="thumbnail">
+          <img src="{{article.urlToImage}}" alt="Image of disaster">
+          <div class="caption">
+            <h3><a href="{{article.url}}">{{article.title}}</a></h3>
+            <p><span>{{article.source.name}}</span><span class="date pull-right">DATE: {{article.publishedAt}}</span></p>
+            <div></div><p>{{article.description}}</p><div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+    </div>
+
+  </div>
+ </div>
+<div class=container">
+<h1><center>Donations</center></h1>
+  <div>
+    <form style="margin:30px" action="/events/registerDonation" method="POST">
+      <input type="text" class="form-control" name="eventId" value="{{ event.id }}" style="display: none;">  
+      <center><button type="submit" class="btn btn-primary" name="submit">Request Donation</button></center>
+    </form>
+  </div>  
+  <div class="news">
+    {% if donations|length <= 0 %}
+    <center><h2>No donations</h2></center>
+    {% endif %}
+    {% for donation in donations %}
+
+        <div>
+          <center>{{donation.receiver}}</center><center>
+                <form style="margin:30px;width:50%" action="/events/makeDonation" method="POST">
+      <input type="number" class="form-control" name="amount">
+      <input type="text" class="form-control" name="eventId" value="{{ event.id }}" style="display: none;">  
+      <input type="text" class="form-control" name="receiver" value="{{donation.receiver}}" style="display: none;">    
+      <center><button style="margin:10px" type="submit" class="btn btn-primary" name="submit">Make Donation</button></center>
+    </form></center>
+     <br />
+        </div>
+
+      
+
+
+      {%endfor%}
+   
+
+  </div>
+ </div>
+
+
+
+<div class="container-fluid">
+  <div class="container">
+   <center> <h4>Tweets</h4> </center>
+       {% if tweets|length <= 0 %}
+    <center><h2>No tweets</h2></center>
+    {% endif %}
+  <div class="row">
+
+
+  {% for tweet in tweets %}
+      <div class="col-sm-6">
+
+  <div class="card" style="margin:30px">
+  <div class="card-header">
+   {{ tweet.user}}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{tweet.created_at }}</h5>
+    <p class="card-text">{{ tweet.text }}</p>
+    
+  </div>
+
+    </div>
+  </div>
+
+  {% endfor %}
+  </div>
+
+  </div>
+</div>
+</div>
+<div>
+  
+</div>
+
+<script>
+  var marker;
+  var colour;
+  // Initialize and add the map
+  function initMap() {
+    var map_length = 5;
+    var event_id = "{{ event.id }}";
+    // The location of Uluru
+    var center_pos = {lat: {{event.location.1 }}, lng: {{event.location.0 }} };
+    var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 8, center: center_pos});
+    var infowindow1 = new Object();
+    infowindow1 = {}
+    var marker1 = new Object();
+    marker1 = {}
+    //for(i=0; i< {{ safeLocation|length }}; i++){
+    {% for i in safeLocation %}
+      //console.log( "{{i}}" ) 
+      console.log( "{{i.latitude}}, {{i.longitude}}" );
+      var lati = Number({{i.latitude}});
+      var long = Number({{i.longitude}});
+      var marked_place = {lat: lati, lng: long };
+
+      marker1["{{i.latitude}}-{{i.longitude}}"] = new google.maps.Marker({position: marked_place, map: map});
+      infowindow1["{{i.latitude}}-{{i.longitude}}"] = new google.maps.InfoWindow({
+          content: "{{i.userName}}"
+        });
+      marker1["{{i.latitude}}-{{i.longitude}}"].addListener('mouseover', function() {
+          infowindow1["{{i.latitude}}-{{i.longitude}}"].open(map, marker1["{{i.latitude}}-{{i.longitude}}"]);
+          console.log('Yes');
+      });
+
+      // assuming you also want to hide the infowindow when user mouses-out
+      marker1["{{i.latitude}}-{{i.longitude}}"].addListener('mouseout', function() {
+          infowindow1["{{i.latitude}}-{{i.longitude}}"].close();
+      });
+      marker1["{{i.latitude}}-{{i.longitude}}"].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+    {% endfor %}
+    var infowindow2 = new Object();
+    infowindow2 = {}
+    var marker2 = new Object();
+    marker2 = {}
+    {% for i in dangerLocation %}
+      //console.log( "{{i}}" ) 
+      console.log( "{{i.latitude}}, {{i.longitude}}" );
+      var lati = Number({{i.latitude}});
+      var long = Number({{i.longitude}});
+      var marked_place = {lat: lati, lng: long };
+      marker2["{{i.latitude}}-{{i.longitude}}"] = new google.maps.Marker({position: marked_place, map: map});
+      infowindow2["{{i.latitude}}-{{i.longitude}}"] = new google.maps.InfoWindow({
+          content: "{{i.userName}}"
+        });
+      marker2["{{i.latitude}}-{{i.longitude}}"].addListener('mouseover', function() {
+          infowindow2["{{i.latitude}}-{{i.longitude}}"].open(map, marker2["{{i.latitude}}-{{i.longitude}}"]);
+          console.log('Yes');
+      });
+
+      // assuming you also want to hide the infowindow when user mouses-out
+      marker2["{{i.latitude}}-{{i.longitude}}"].addListener('mouseout', function() {
+          infowindow2["{{i.latitude}}-{{i.longitude}}"].close();
+      });
+      marker2["{{i.latitude}}-{{i.longitude}}"].setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png')
+    {% endfor %}
+    var infowindow3 = new Object();
+    infowindow3 = {}
+    var marker3 = new Object();
+    marker3 = {}
+    {% for i in helpLocation %}
+      //console.log( "{{i}}" ) 
+      console.log( "{{i.latitude}}, {{i.longitude}}" );
+      var lati = Number({{i.latitude}} );
+      var long = Number({{i.longitude}} );
+      var marked_place = {lat: lati, lng: long };
+      marker3["{{i.latitude}}-{{i.longitude}}"] = new google.maps.Marker({position: marked_place, map: map});
+      infowindow3["{{i.latitude}}-{{i.longitude}}"] = new google.maps.InfoWindow({
+          content: "{{i.userName}}"
+        });
+      marker3["{{i.latitude}}-{{i.longitude}}"].addListener('mouseover', function() {
+          infowindow3["{{i.latitude}}-{{i.longitude}}"].open(map, marker3["{{i.latitude}}-{{i.longitude}}"]);
+          console.log('Yes');
+      });
+
+      // assuming you also want to hide the infowindow when user mouses-out
+      marker3["{{i.latitude}}-{{i.longitude}}"].addListener('mouseout', function() {
+          infowindow3["{{i.latitude}}-{{i.longitude}}"].close();
+      });
+      marker3["{{i.latitude}}-{{i.longitude}}"].setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png')
+    {% endfor %}
+
+
+    var user_place = center_pos;
+
+    marker = new google.maps.Marker({
+
+      position: user_place,
+      map: map,
+      draggable:true,
+      title:"Drag me!"
+    });
+
+    marker.setIcon('http://maps.google.com/mapfiles/ms/icons/black-dot.png');
+
+    google.maps.event.addListener(marker, 'dragend', function (evt) {
+    document.getElementById("latbox").value = evt.latLng.lat().toFixed(3);
+    document.getElementById("lngbox").value = evt.latLng.lng().toFixed(3);
+    document.getElementById("eventId").value = event_id;
+    var color_png = this.icon.slice(41);
+    if(color_png == "yellow-dot.png"){
+      colour = 0;
+    }else if(color_png == "red-dot.png"){
+      colour = 1;
+    }else{
+      colour = 2;
+    }
+    document.getElementById("color").value = colour;
+    document.getElementById("eventId").value = event_id;
+    });
+
+
+  }
+
+  function setColor(color){
+    if(color == 0){
+      colour = 0;
+      marker.setIcon("http://maps.google.com/mapfiles/ms/icons/yellow-dot.png");
+    }else if(color == 1){
+      colour  = 1;
+      marker.setIcon("http://maps.google.com/mapfiles/ms/icons/red-dot.png");
+    }else if(color == 2){
+      colour = 2;
+      marker.setIcon("http://maps.google.com/mapfiles/ms/icons/green-dot.png");
+    }
+    document.getElementById("color").value = colour;
+  }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCupffjyA_MWeqNsoQmxU4-coZ-D_4L-Ts&callback=initMap" async defer>
+</script>
+</body>
+</html>

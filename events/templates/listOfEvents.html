@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<title>Events</title>
+</head>
+<body style="background-color:  #ebebe0	;">
+	<div class="jumbotron" style="background: url('https://i.ytimg.com/vi/noFVzXc4Q9s/maxresdefault.jpg') no-repeat center center;">	
+	  <h1 style="color: white"><center>LIST OF DISASTERS</center></h1>
+	</div>
+	<div class="container-fluid">
+	<div class="row" style="overflow: hidden; ">
+	{% for event in events %}
+	<div class="panel panel-info col-sm-6" style="margin-bottom: -99999px;padding-bottom: 99999px; ">
+		<div class="panel-heading" ><h1><a href="/events/{{event.id}}"><span class="glyphicon glyphicon-list-alt"></span> {{event.title}}</a><h1></div>
+		<div class="panel-body">
+			<div class="well"><p>Event Details:</p>
+		<p>{{event.description|linebreaks}}</p>
+		<p>Coordinates of event: <span></span>{{event.location}}</p>
+		</div>
+		</div>
+		<br>
+		<br>
+		<br>
+		<br>
+	</div>	
+	{% endfor %}
+	</div>
+	</div>
+
+</body>
+</html>
