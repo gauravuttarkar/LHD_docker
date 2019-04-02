@@ -129,39 +129,7 @@
 
   </div>
  </div>
-<div class=container">
-<h1><center>Donations</center></h1>
-  <div>
-    <form style="margin:30px" action="/events/registerDonation" method="POST">
-      <input type="text" class="form-control" name="eventId" value="{{ event.id }}" style="display: none;">  
-      <center><button type="submit" class="btn btn-primary" name="submit">Request Donation</button></center>
-    </form>
-  </div>  
-  <div class="news">
-    {% if donations|length <= 0 %}
-    <center><h2>No donations</h2></center>
-    {% endif %}
-    {% for donation in donations %}
 
-        <div>
-          <center>{{donation.receiver}}</center><center>
-                <form style="margin:30px;width:50%" action="/events/makeDonation" method="POST">
-      <input type="number" class="form-control" name="amount">
-      <input type="text" class="form-control" name="eventId" value="{{ event.id }}" style="display: none;">  
-      <input type="text" class="form-control" name="receiver" value="{{donation.receiver}}" style="display: none;">    
-      <center><button style="margin:10px" type="submit" class="btn btn-primary" name="submit">Make Donation</button></center>
-    </form></center>
-     <br />
-        </div>
-
-      
-
-
-      {%endfor%}
-   
-
-  </div>
- </div>
 
 
 
@@ -320,6 +288,8 @@
 
 
   }
+// AIzaSyCSXeX3rYsGXTZDiLEQDk5SodYFN9JSN4A
+
 
   function setColor(color){
     if(color == 0){

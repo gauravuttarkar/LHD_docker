@@ -3,7 +3,7 @@ from predicthq import Client
 from django.http import HttpResponse
 import requests
 from events.models import SafeLocation, DangerLocation, HelpLocation, Event\
-							,UserComments, Donations
+							,UserComments
 from newsapi import NewsApiClient							
 from django.contrib.auth.models import User
 # Create your views here.
@@ -197,7 +197,7 @@ def eventDetail(request,eventId):
 	# 	#print(i)
 	# 	#print(100*'-')
 	# print(tweetList)	
-	receiver = Donations.objects.all().filter(eventId=eventId)
+	#receiver = Donations.objects.all().filter(eventId=eventId)
 	return render(request,'eventDetail.html',{'event':results,
 											  'weather':[mainweather,description],
 											  'temp':temp,
@@ -210,7 +210,7 @@ def eventDetail(request,eventId):
 											  'helpLocation': helpObj,
 											  'comments': comments,
 											  'articles': all_articles,
-											  'donations':receiver,
+											  #'donations':receiver,
 											  #'tweets': tweetList
 												})
 
@@ -307,27 +307,7 @@ def twitter(request):
 		print(i)
 	return HttpResponse("Twitter")
 
-def registerDonation(request):
-	eventId = request.POST.get('eventId')
-	eventObj = Event.objects.get(eventId=eventId)
-	if request.user:
-		DonationObj = Donations.objects.create(eventId=eventObj,receiver=request.user)
 
-				
-	#SafeLocation.objects.create()
-	return redirect("/events/"+eventId)
-
-def makeDonation(request):
-	eventId = request.POST.get('eventId')
-	eventObj = Event.objects.get(eventId=eventId)
-	# receiverObj = request.POST.get('receiver')
-	# print(type(receiver))
-	# if request.user:
-	# 	TransactionObj = Transaction.objects.create(eventId=eventObj,receiver=request.user)
-
-				
-	#SafeLocation.objects.create()
-	return redirect("/events/"+eventId)
 
 
 

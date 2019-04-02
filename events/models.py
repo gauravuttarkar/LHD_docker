@@ -28,12 +28,6 @@ class UserComments(models.Model):
 	eventId = models.ForeignKey(Event,on_delete=models.CASCADE,null=False,default=None)	
 	userComment =  models.CharField(max_length=3000, null=True,default=None)
 
-class bankDetails(models.Model):
-	userName =  models.ForeignKey(User,on_delete=models.CASCADE)
-	bankDetails = models.CharField(max_length=3000, null=True,default=None)
 
-class Donations(models.Model):
-	eventId = models.ForeignKey(Event,on_delete=models.CASCADE)
-	receiver = models.ForeignKey(User,on_delete=models.CASCADE)
 
 	

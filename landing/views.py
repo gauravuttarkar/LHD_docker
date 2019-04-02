@@ -14,7 +14,7 @@ from . import templates
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from events.models import bankDetails
+#from events.models import bankDetails
 from django.contrib.auth import logout as django_logout
 
 def login1(request):
@@ -38,12 +38,12 @@ def signup_submit(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
     email = request.POST.get('email')
-    bank = request.POST.get('bank')
-    print(type(bank))
+    #bank = request.POST.get('bank')
+    #print(type(bank))
     user = User.objects.create_user(username=username, email=email,password=password)
     user.save()
-    bankObj = bankDetails.objects.create(userName = user,bankDetails=bank)
-    bankObj.save()
+    # bankObj = bankDetails.objects.create(userName = user,bankDetails=bank)
+    # bankObj.save()
     return redirect('/')
 
 

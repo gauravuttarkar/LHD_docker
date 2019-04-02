@@ -8,8 +8,8 @@ urlpatterns = [
     path('marker',views.mapMarker, name="marker"),
     path('comment',views.comments),
     path('twitter',views.twitter),
-    path('registerDonation',views.registerDonation),
-    path('makeDonation',views.makeDonation),
+    # path('registerDonation',views.registerDonation),
+    # path('makeDonation',views.makeDonation),
     path('<str:eventId>',views.eventDetail,name="id"),
     
 
