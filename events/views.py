@@ -6,6 +6,9 @@ from events.models import SafeLocation, DangerLocation, HelpLocation, Event\
 							,UserComments
 from newsapi import NewsApiClient							
 from django.contrib.auth.models import User
+from django.core.files.storage import FileSystemStorage
+from . import text2info , audio2text
+import googlemaps
 # Create your views here.
 
 def index(request):
@@ -22,7 +25,7 @@ def index(request):
 	'Authorization': "Bearer " + ACCESS_TOKEN
 	}
 	r = requests.get(url, params=payload,headers=headers)
-	print(r)
+	#print(r)
 	# phq = Client(access_token=ACCESS_TOKEN)
 	results = r.json()['results']
 	#print(results)
@@ -32,9 +35,9 @@ def index(request):
 			results.pop(count)	
 		count = count + 1
 
-	for i in results:
-		print(i)
-		print("*"*100)	
+	#for i in results:
+		#print(i)
+		#print("*"*100)	
 	# for event in phq.events.search(category="disasters",state="active"):
 	#     print(event.description, event.category, event.title, event.start.strftime('%Y-%m-%d'))
 	return render(request,'listOfEvents.html',{'events':results})
@@ -158,47 +161,18 @@ def eventDetail(request,eventId):
 
 
 	all_articles = newsapi.get_everything(q=queries,
-                                      sources='bbc-news,reddit-r-all,the-new-york-times,al-jazeera-english,the-times-of-india,the-hindu,google-news',
-                                      language='en',
-                                      sort_by='relevancy',
-                                      )
+											sources='bbc-news,reddit-r-all,the-new-york-times,al-jazeera-english,the-times-of-india,the-hindu,google-news',
+											language='en',
+											sort_by='relevancy',
+											)
 	print(type(all_articles))
 	print(all_articles)
 	#print(all_articles)
 	
 	
 	print(results['id'])
-	# ACCESS_TOKEN = "AAAAAAAAAAAAAAAAAAAAANkH9AAAAAAAorENrW%2Bt7Y4uQwZMJr43ZcWTIaY%3DXWlT3Xuacow4mmAvkKEC4EPdjY0TTL9VClG3PU8vHSR5nBj0v9"
-	# url = "https://api.twitter.com/1.1/search/tweets.json"
-	# headers={
-	# 'Accept': 'application/json',
-	# 'Authorization': "Bearer " + ACCESS_TOKEN,
-	# #'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8.',
-	
-	# }
-	# payload={
-	# 'grant_type':'client_credentials',
-	# 'q':'#disaster',
-	# 'geocode': str(lat)+","+str(longi)+",50mi"
-	# }
-	# r = requests.get(url,headers=headers,params=payload)
-	# tweets = r.json()
-	# print(tweets)
-	# tweets = tweets['statuses']
-	# #print(tweets)
-	# tweetList = []
-	# print(longi,lat)
-	# for i in tweets:
-	# 	di = {}
-	# 	di['created_at'] = i['created_at']
-	# 	di['text'] = i['text']
-	# 	di['user'] = i['user']['name']
-	# 	tweetList.append(di)
-	# 	#print(i)
-	# 	#print(100*'-')
-	# print(tweetList)	
-	#receiver = Donations.objects.all().filter(eventId=eventId)
-	return render(request,'eventDetail.html',{'event':results,
+
+	return render(request, 'eventDetail.html', {'event':results,
 											  'weather':[mainweather,description],
 											  'temp':temp,
 											  'pressure':pressure,
@@ -250,6 +224,42 @@ def mapMarker(request):
 	#SafeLocation.objects.create()
 	return redirect("/events/"+eventId)
 
+def audio_submit(request,converted_text, eventId):
+    res = text2info.get_info(converted_text)
+    print("here ", res)
+    gmaps = googlemaps.Client(key='AIzaSyC5C381MWOwCKW4Y-CP0KVptAcY4FqryAU')
+    
+    geocode_result = gmaps.geocode(res['Address'])
+    print(geocode_result)
+    # print(geocode_result)
+    Address = res['Address']
+    x = geocode_result[0]['geometry']['location']['lat']
+    y = geocode_result[0]['geometry']['location']['lng']
+    # intensity = res['Intensity']
+    # Remarks = res['Remark']
+    eventObj = Event.objects.get(eventId=eventId)
+    DangerLocation.objects.create(userName=request.user,eventId=eventObj,latitude=x,longitude=y)
+    # map.save() 
+
+
+def audio(request,eventId):
+    if request.method == 'POST' and request.FILES['myfile']:
+        print("Inside audio upload")
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        converted_text = audio2text.get_text_from_audio(uploaded_file_url)
+        audio_submit(request,converted_text, eventId)
+        # file_path = os.path.join(BASE_DIR, uploaded_file_url)
+        # pass_file_path(file_path)
+        # index()
+        print(uploaded_file_url)
+        return redirect("/events/"+eventId)
+        # return render(request, 'NLP/index.html', {
+        #     'uploaded_file_url': uploaded_file_url
+        # })
+    return redirect("/events/"+eventId)
 def comments(requests):
 	print(requests.POST)
 	eventId = requests.POST.get('eventId')

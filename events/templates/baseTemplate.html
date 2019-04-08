@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+	<head>
+		{% block title %}
+		{% endblock %}
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'css/maint.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/main.css' %}"  />
+		<noscript><link rel="stylesheet" href="{% static 'css/noscript.css' %}" /></noscript>
+
+
+		{% block styles %}
+		{% endblock %}
+		<script type="text/javascript">
+			function addbank(){
+				var obj = document.getElementById("textTwo");
+				obj.style.visibility = "visible";
+			}
+
+			function removeBank(){
+				var obj = document.getElementById("textTwo");
+				obj.style.visibility = "hidden";
+			}
+			// var textTwo = document.getElementById("textTwo");
+			// //Get the value of textOne textbox input
+			// var textOneValue = textOne.value;
+			 
+			// var textTwoValue = textOneValue;
+			// //Assign the value of textOne textbox to textTwo textbox
+			// textTwo.value = textTwoValue;
+		</script>
+	</head>
+	<body class="homepage is-preload">
+		<div id="page-wrapper">
+			
+						<nav id="nav">
+							<ul>
+								<li><a href="/">Home</a></li>
+								<li><a href="/events">Events</a></li>
+								
+
+ 								{% if user.is_authenticated %}
+								<li>Hello {{ user.username  }}</li>
+								<li> <a href="{% url "logout" %}">Logout</a></li>
+								<li>
+									<a href="#">Donations</a>
+									<ul>
+										<li><a href="/donations/donor/{{eventId}}">Make a donation</a></li>
+										<li><a href="/donations/receiver/{{eventId}}">Receive a donation</a></li>
+
+									</ul>
+								</li>
+								{% else %}
+								<li><a href="{% url "login" %}">Login</a></li>
+								<li><a href="{% url "signup" %}">SignUp</a></li>
+								{% endif %}
+							</ul>
+						</nav>
+
+						<div>
+							{% block content %}
+							{% endblock %}
+						</div>	
+			
+
+			
+		</div>
+
+		
+					<script src="{% static 'js/jquery.min.js' %}"></script>
+			<script src="{% static 'js/jquery.dropotron.min.js' %}"></script>
+			<script src="{% static 'js/jquery.scrolly.min.js' %}"></script>
+			<script src="{% static 'js/jquery.scrollex.min.js' %}"></script>
+			<script src="{% static 'js/browser.min.js' %}"></script>
+			<script src="{% static 'js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'js/util.js' %}"></script>
+			<script src="{% static 'js/main.js' %}"></script>
+
+	</body>
+</html>

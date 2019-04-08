@@ -1,0 +1,26 @@
+{%extends "baseTemplate.html" %}
+{% block title %}<title>{{event.title}}</title>{% endblock %}
+
+{% block content %}
+					<br>
+					<br>
+					<br>
+					<section class="carousel">
+					<div class="reel">
+						{% for obj in listOfReceivers %}
+						<article>
+							
+							<header>
+								<h3><a href="#">{{obj.userName}}</a></h3>
+							</header>
+							<p>{{obj.comments}}</p>
+							<a href="/events" class="button circled scrolly">Donate</a>
+						</article>
+
+						{% endfor %}
+					</div>
+				</section>
+
+	
+
+{% endblock %}
