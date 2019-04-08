@@ -119,7 +119,7 @@
 <div class=container">
 <h1><center>NEWS SECTION</center></h1>
   <div class="news">
-    {% if article.articles|length <= 0 %}
+    {% if articles.articles|length <= 0 %}
     <center><h2>No news</h2></center>
     {% endif %}
     <center>
@@ -324,7 +324,7 @@
   }
 </script>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSXeX3rYsGXTZDiLEQDk5SodYFN9JSN4A&callback=initMap" async defer>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRDCGxEgNv7zEUPPeskiTccb1Z6oytXgI&callback=initMap" async defer>
 </script>
 {% endblock %}
 </body>
