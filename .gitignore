@@ -272,3 +272,4 @@ docs/_build/
 
 # PyBuilder
 target/
+db.sqlite3
