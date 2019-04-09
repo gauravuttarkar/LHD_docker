@@ -7,7 +7,7 @@ from . models import Receiver
 # Create your views here.
 
 def index(request):
-	return HttpResponse("Done")
+	return HttpResponse("Done")  
 
 def donor(request,eventId):
 	print(eventId)

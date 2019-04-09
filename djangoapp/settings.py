@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'TEST_MIRROR': 'default'
         # ... plus some other settings
-    }
+    } 
 }
 
 # if 'test' in sys.argv:
