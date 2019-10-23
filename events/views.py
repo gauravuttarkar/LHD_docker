@@ -10,7 +10,7 @@ from django.contrib.auth.models import User
 
 def index(request):
 	url = "https://api.predicthq.com/v1/events/"
-	ACCESS_TOKEN = "h8jTYSTHTta2o84n9WfahbIO2eRC9S"
+	ACCESS_TOKEN = "_Kr6HjOROBxnjng15d3Z5hU2f1OqVszKVOwJYXpf"
 	payload={
 	'sort':'rank',
 	'count':'50',
@@ -40,7 +40,7 @@ def index(request):
 
 def eventDetail(request,eventId):
 	url = "https://api.predicthq.com/v1/events/"
-	ACCESS_TOKEN = "h8jTYSTHTta2o84n9WfahbIO2eRC9S"
+	ACCESS_TOKEN = "_Kr6HjOROBxnjng15d3Z5hU2f1OqVszKVOwJYXpf"
 	payload={
 	'id' : eventId
 	}
@@ -180,22 +180,22 @@ def eventDetail(request,eventId):
 	'q':'#disaster',
 	'geocode': str(lat)+","+str(longi)+",50mi"
 	}
-	r = requests.get(url,headers=headers,params=payload)
-	tweets = r.json()
-	#print(tweets)
-	tweets = tweets['statuses']
-	#print(tweets)
-	tweetList = []
-	print(longi,lat)
-	for i in tweets:
-		di = {}
-		di['created_at'] = i['created_at']
-		di['text'] = i['text']
-		di['user'] = i['user']['name']
-		tweetList.append(di)
-		#print(i)
-		#print(100*'-')
-	print(tweetList)	
+	# r = requests.get(url,headers=headers,params=payload)
+	# tweets = r.json()
+	# #print(tweets)
+	# tweets = tweets['statuses']
+	# #print(tweets)
+	# tweetList = []
+	# print(longi,lat)
+	# for i in tweets:
+	# 	di = {}
+	# 	di['created_at'] = i['created_at']
+	# 	di['text'] = i['text']
+	# 	di['user'] = i['user']['name']
+	# 	tweetList.append(di)
+	# 	#print(i)
+	# 	#print(100*'-')
+	# print(tweetList)	
 
 	return render(request,'eventDetail.html',{'event':results,
 											  'weather':[mainweather,description],
@@ -209,7 +209,7 @@ def eventDetail(request,eventId):
 											  'helpLocation': helpObj,
 											  'comments': comments,
 											  'articles': all_articles,
-											  'tweets': tweetList
+											  #'tweets': tweetList
 												})
 
 def mapMarker(request):
