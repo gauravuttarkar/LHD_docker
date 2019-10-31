@@ -3,7 +3,7 @@ from django.http import HttpResponse
 import os
 import json
 import requests
-from djangoapp.settings import BASE_DIR
+from djangoapp.settings.base import BASE_DIR
 # file_path = os.path.join(BASE_DIR, 'Audio_File/AudioTest2filtered.wav')
 YOUR_API_KEY = '97d00ac174ac40f9b945e8f187bf89c1'
 REGION = 'westus' # westus, eastasia, northeurope
