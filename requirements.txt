@@ -1,6 +1,6 @@
 certifi==2018.11.29
 chardet==3.0.4
-Django==2.0.9
+Django==2.2.13
 idna==2.5
 newsapi-python==0.2.3
 predicthq==0.0.17
